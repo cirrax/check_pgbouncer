@@ -44,8 +44,8 @@ class PgBouncer(nagiosplugin.Resource):
         cur_clients = sum([item[2] for item in pools])
         pct_clients = 100 * float(cur_clients) / max_clients  # percentage of max_client_conn
         # maxdb
-        top_db = max(databases, key=lambda x: float(x[9])/x[8])  # find database with highest conn percentage used
-        pct_db = 100 * float(top_db[9]) / top_db[8]
+        top_db = max(databases, key=lambda x: float(x[9])/(x[8] or not x[8]))  # find database with highest conn percentage used
+        pct_db = 100 * float(top_db[9]) / (top_db[8] or not top_db[8])
         # maxpool
         top_pool = max(pools, key=lambda x: float(x[4])/([i[5] for i in databases if i[0] == x[0]][0]))
         pct_pool = 100 * float(top_pool[4])/[i[5] for i in databases if i[0] == top_pool[0]][0]
